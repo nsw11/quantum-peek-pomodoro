@@ -58,15 +58,18 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [isRunning, sessionType, isMuted]);
 
-  // Peek timer (5 seconds)
+  // Peek timer (3 seconds)
   useEffect(() => {
     if (!isPeeking) return;
+
+    // Capture timeLeft at the moment of peeking
+    const currentTimeLeft = timeLeft;
 
     const timeout = setTimeout(() => {
       setIsPeeking(false);
       
       // If timer is complete, auto-advance to break
-      if (timeLeft === 0) {
+      if (currentTimeLeft === 0) {
         handleAdvanceToBreak();
       } else {
         // Apply penalty if incomplete
@@ -82,13 +85,13 @@ const Index = () => {
         }
       }
 
-      // Start cooldown
+      // Start cooldown (3 seconds)
       setCanPeek(false);
-      setTimeout(() => setCanPeek(true), 5000);
-    }, 5000);
+      setTimeout(() => setCanPeek(true), 3000);
+    }, 3000);
 
     return () => clearTimeout(timeout);
-  }, [isPeeking, timeLeft, settings.peekPenaltyMinutes, toast]);
+  }, [isPeeking, settings.peekPenaltyMinutes, toast]);
 
   const handlePeek = () => {
     if (canPeek && sessionType === "work" && isRunning) {
@@ -269,7 +272,7 @@ const Index = () => {
           <p className="font-semibold text-foreground">How it works:</p>
           <ul className="space-y-1 list-disc list-inside">
             <li>Work timer stays hidden - trust the process</li>
-            <li>Peek to observe the timer (5s reveal, then 5s cooldown)</li>
+            <li>Peek to observe the timer (3s reveal, then 3s cooldown)</li>
             <li>Peeking before completion adds penalty time (if enabled)</li>
             <li>Break timers are always visible with alerts</li>
             <li>Complete 4 pomodoros to earn a long break</li>
