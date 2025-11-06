@@ -50,14 +50,20 @@ const Index = () => {
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
-          if (sessionType !== "work") {
+          if (sessionType === "work") {
+            // Work session complete - advance to break
+            setIsRunning(false);
+            handleAdvanceToBreak();
+            return 0;
+          } else {
+            // Break expired - show alert
             setIsExpired(true);
             if (!isMuted && audioRef.current) {
               audioRef.current.play();
             }
+            setIsRunning(false);
+            return 0;
           }
-          setIsRunning(false);
-          return 0;
         }
         return prev - 1;
       });

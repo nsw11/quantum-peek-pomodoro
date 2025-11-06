@@ -55,13 +55,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
           <div className="space-y-2">
             <Label>Work Session</Label>
             <div className="flex gap-2">
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="work-minutes" className="text-xs text-muted-foreground">
+                  Minutes
+                </Label>
                 <Input
                   id="work-minutes"
                   type="number"
                   min="0"
                   max="120"
-                  placeholder="Minutes"
                   value={localSettings.workMinutes}
                   onChange={(e) =>
                     setLocalSettings({
@@ -71,13 +73,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   }
                 />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="work-seconds" className="text-xs text-muted-foreground">
+                  Seconds
+                </Label>
                 <Input
                   id="work-seconds"
                   type="number"
                   min="0"
                   max="59"
-                  placeholder="Seconds"
                   value={localSettings.workSeconds}
                   onChange={(e) =>
                     setLocalSettings({
@@ -93,13 +97,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
           <div className="space-y-2">
             <Label>Short Break</Label>
             <div className="flex gap-2">
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="short-break-minutes" className="text-xs text-muted-foreground">
+                  Minutes
+                </Label>
                 <Input
                   id="short-break-minutes"
                   type="number"
                   min="0"
                   max="60"
-                  placeholder="Minutes"
                   value={localSettings.shortBreakMinutes}
                   onChange={(e) =>
                     setLocalSettings({
@@ -109,13 +115,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   }
                 />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="short-break-seconds" className="text-xs text-muted-foreground">
+                  Seconds
+                </Label>
                 <Input
                   id="short-break-seconds"
                   type="number"
                   min="0"
                   max="59"
-                  placeholder="Seconds"
                   value={localSettings.shortBreakSeconds}
                   onChange={(e) =>
                     setLocalSettings({
@@ -131,13 +139,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
           <div className="space-y-2">
             <Label>Long Break</Label>
             <div className="flex gap-2">
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="long-break-minutes" className="text-xs text-muted-foreground">
+                  Minutes
+                </Label>
                 <Input
                   id="long-break-minutes"
                   type="number"
                   min="0"
                   max="120"
-                  placeholder="Minutes"
                   value={localSettings.longBreakMinutes}
                   onChange={(e) =>
                     setLocalSettings({
@@ -147,13 +157,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   }
                 />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="long-break-seconds" className="text-xs text-muted-foreground">
+                  Seconds
+                </Label>
                 <Input
                   id="long-break-seconds"
                   type="number"
                   min="0"
                   max="59"
-                  placeholder="Seconds"
                   value={localSettings.longBreakSeconds}
                   onChange={(e) =>
                     setLocalSettings({
@@ -169,13 +181,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
           <div className="space-y-2">
             <Label>Peek Penalty</Label>
             <div className="flex gap-2">
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="penalty-minutes" className="text-xs text-muted-foreground">
+                  Minutes
+                </Label>
                 <Input
                   id="penalty-minutes"
                   type="number"
                   min="0"
                   max="30"
-                  placeholder="Minutes"
                   value={localSettings.peekPenaltyMinutes}
                   onChange={(e) =>
                     setLocalSettings({
@@ -185,13 +199,15 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   }
                 />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="penalty-seconds" className="text-xs text-muted-foreground">
+                  Seconds
+                </Label>
                 <Input
                   id="penalty-seconds"
                   type="number"
                   min="0"
                   max="59"
-                  placeholder="Seconds"
                   value={localSettings.peekPenaltySeconds}
                   onChange={(e) =>
                     setLocalSettings({
