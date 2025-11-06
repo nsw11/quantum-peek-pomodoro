@@ -9,21 +9,29 @@ type SessionType = "work" | "shortBreak" | "longBreak";
 
 interface SettingsType {
   workMinutes: number;
+  workSeconds: number;
   shortBreakMinutes: number;
+  shortBreakSeconds: number;
   longBreakMinutes: number;
+  longBreakSeconds: number;
   peekPenaltyMinutes: number;
+  peekPenaltySeconds: number;
 }
 
 const Index = () => {
   const [settings, setSettings] = useState<SettingsType>({
     workMinutes: 25,
+    workSeconds: 0,
     shortBreakMinutes: 10,
+    shortBreakSeconds: 0,
     longBreakMinutes: 30,
+    longBreakSeconds: 0,
     peekPenaltyMinutes: 0,
+    peekPenaltySeconds: 0,
   });
 
   const [sessionType, setSessionType] = useState<SessionType>("work");
-  const [timeLeft, setTimeLeft] = useState(settings.workMinutes * 60);
+  const [timeLeft, setTimeLeft] = useState(settings.workMinutes * 60 + settings.workSeconds);
   const [isRunning, setIsRunning] = useState(false);
   const [pomodoroCount, setPomodoroCount] = useState(0);
   const [isPeeking, setIsPeeking] = useState(false);
@@ -73,13 +81,20 @@ const Index = () => {
         handleAdvanceToBreak();
       } else {
         // Apply penalty if incomplete
-        if (settings.peekPenaltyMinutes > 0) {
-          const penaltySeconds = settings.peekPenaltyMinutes * 60;
-          setTimeLeft((prev) => prev + penaltySeconds);
-          setTotalPenalty((prev) => prev + settings.peekPenaltyMinutes);
+        const totalPenaltySeconds = settings.peekPenaltyMinutes * 60 + settings.peekPenaltySeconds;
+        if (totalPenaltySeconds > 0) {
+          setTimeLeft((prev) => prev + totalPenaltySeconds);
+          setTotalPenalty((prev) => prev + totalPenaltySeconds);
+          
+          const penaltyMins = Math.floor(totalPenaltySeconds / 60);
+          const penaltySecs = totalPenaltySeconds % 60;
+          let description = "+";
+          if (penaltyMins > 0) description += `${penaltyMins} min `;
+          if (penaltySecs > 0) description += `${penaltySecs} sec`;
+          
           toast({
             title: "Peek Penalty Applied",
-            description: `+${settings.peekPenaltyMinutes} minute${settings.peekPenaltyMinutes > 1 ? "s" : ""} added`,
+            description: description.trim() + " added",
             variant: "destructive",
           });
         }
@@ -106,22 +121,38 @@ const Index = () => {
 
     if (nextPomodoroCount % 4 === 0) {
       setSessionType("longBreak");
-      setTimeLeft(settings.longBreakMinutes * 60);
+      setTimeLeft(settings.longBreakMinutes * 60 + settings.longBreakSeconds);
       setPomodoroCount(0);
     } else {
       setSessionType("shortBreak");
-      setTimeLeft(settings.shortBreakMinutes * 60);
+      setTimeLeft(settings.shortBreakMinutes * 60 + settings.shortBreakSeconds);
     }
     
     setIsRunning(false);
     setIsExpired(false);
   };
 
+  const handleReset = () => {
+    setIsRunning(false);
+    setIsPeeking(false);
+    setCanPeek(true);
+    setIsExpired(false);
+    
+    if (sessionType === "work") {
+      setTimeLeft(settings.workMinutes * 60 + settings.workSeconds);
+      setTotalPenalty(0);
+    } else if (sessionType === "shortBreak") {
+      setTimeLeft(settings.shortBreakMinutes * 60 + settings.shortBreakSeconds);
+    } else {
+      setTimeLeft(settings.longBreakMinutes * 60 + settings.longBreakSeconds);
+    }
+  };
+
   const handleStart = () => {
     if (sessionType !== "work" && isExpired) {
       // Starting new work session after break
       setSessionType("work");
-      setTimeLeft(settings.workMinutes * 60);
+      setTimeLeft(settings.workMinutes * 60 + settings.workSeconds);
       setIsExpired(false);
     }
     setIsRunning(true);
@@ -221,7 +252,7 @@ const Index = () => {
 
                 {totalPenalty > 0 && (
                   <div className="text-sm text-destructive shadow-penalty">
-                    Penalty: +{totalPenalty} min
+                    Penalty: +{Math.floor(totalPenalty / 60) > 0 ? `${Math.floor(totalPenalty / 60)} min ` : ""}{totalPenalty % 60 > 0 ? `${totalPenalty % 60} sec` : ""}
                   </div>
                 )}
               </div>
@@ -241,7 +272,7 @@ const Index = () => {
           </div>
 
           {/* Controls */}
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
             {sessionType === "work" && isRunning && (
               <Button
                 variant="peek"
@@ -264,6 +295,14 @@ const Index = () => {
                 Start {sessionType === "work" ? "Work" : "Break"}
               </Button>
             )}
+            
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
           </div>
         </Card>
 
