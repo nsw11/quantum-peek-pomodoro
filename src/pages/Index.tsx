@@ -51,9 +51,8 @@ const Index = () => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
           if (sessionType === "work") {
-            // Work session complete - advance to break
+            // Work session complete - stay at zero until peeked
             setIsRunning(false);
-            handleAdvanceToBreak();
             return 0;
           } else {
             // Break expired - show alert

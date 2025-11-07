@@ -19,12 +19,27 @@ interface SettingsProps {
   onSave: (settings: SettingsProps["settings"]) => void;
 }
 
+type LocalSettingsType = {
+  [K in keyof SettingsProps["settings"]]: string | number;
+};
+
 export function Settings({ settings, onSave }: SettingsProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [localSettings, setLocalSettings] = useState(settings);
+  const [localSettings, setLocalSettings] = useState<LocalSettingsType>(settings);
 
   const handleSave = () => {
-    onSave(localSettings);
+    // Convert empty strings to 0
+    const sanitizedSettings = {
+      workMinutes: localSettings.workMinutes === "" ? 0 : Number(localSettings.workMinutes),
+      workSeconds: localSettings.workSeconds === "" ? 0 : Number(localSettings.workSeconds),
+      shortBreakMinutes: localSettings.shortBreakMinutes === "" ? 0 : Number(localSettings.shortBreakMinutes),
+      shortBreakSeconds: localSettings.shortBreakSeconds === "" ? 0 : Number(localSettings.shortBreakSeconds),
+      longBreakMinutes: localSettings.longBreakMinutes === "" ? 0 : Number(localSettings.longBreakMinutes),
+      longBreakSeconds: localSettings.longBreakSeconds === "" ? 0 : Number(localSettings.longBreakSeconds),
+      peekPenaltyMinutes: localSettings.peekPenaltyMinutes === "" ? 0 : Number(localSettings.peekPenaltyMinutes),
+      peekPenaltySeconds: localSettings.peekPenaltySeconds === "" ? 0 : Number(localSettings.peekPenaltySeconds),
+    };
+    onSave(sanitizedSettings);
     setIsOpen(false);
   };
 
@@ -68,7 +83,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      workMinutes: parseInt(e.target.value) || 0,
+                      workMinutes: e.target.value === "" ? "" : parseInt(e.target.value) || 0,
                     })
                   }
                 />
@@ -86,7 +101,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      workSeconds: Math.min(parseInt(e.target.value) || 0, 59),
+                      workSeconds: e.target.value === "" ? "" : Math.min(parseInt(e.target.value) || 0, 59),
                     })
                   }
                 />
@@ -110,7 +125,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      shortBreakMinutes: parseInt(e.target.value) || 0,
+                      shortBreakMinutes: e.target.value === "" ? "" : parseInt(e.target.value) || 0,
                     })
                   }
                 />
@@ -128,7 +143,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      shortBreakSeconds: Math.min(parseInt(e.target.value) || 0, 59),
+                      shortBreakSeconds: e.target.value === "" ? "" : Math.min(parseInt(e.target.value) || 0, 59),
                     })
                   }
                 />
@@ -152,7 +167,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      longBreakMinutes: parseInt(e.target.value) || 0,
+                      longBreakMinutes: e.target.value === "" ? "" : parseInt(e.target.value) || 0,
                     })
                   }
                 />
@@ -170,7 +185,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      longBreakSeconds: Math.min(parseInt(e.target.value) || 0, 59),
+                      longBreakSeconds: e.target.value === "" ? "" : Math.min(parseInt(e.target.value) || 0, 59),
                     })
                   }
                 />
@@ -194,7 +209,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      peekPenaltyMinutes: parseInt(e.target.value) || 0,
+                      peekPenaltyMinutes: e.target.value === "" ? "" : parseInt(e.target.value) || 0,
                     })
                   }
                 />
@@ -212,7 +227,7 @@ export function Settings({ settings, onSave }: SettingsProps) {
                   onChange={(e) =>
                     setLocalSettings({
                       ...localSettings,
-                      peekPenaltySeconds: Math.min(parseInt(e.target.value) || 0, 59),
+                      peekPenaltySeconds: e.target.value === "" ? "" : Math.min(parseInt(e.target.value) || 0, 59),
                     })
                   }
                 />
