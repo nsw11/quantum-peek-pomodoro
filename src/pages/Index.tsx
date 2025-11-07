@@ -278,28 +278,26 @@ const Index = () => {
 
           {/* Controls */}
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            {sessionType === "work" && isRunning && (
+            {sessionType === "work" && (
               <Button
                 variant="peek"
                 size="lg"
                 onClick={handlePeek}
-                disabled={!canPeek || isPeeking}
+                disabled={!canPeek || isPeeking || !isRunning}
               >
                 <Eye className="mr-2 h-5 w-5" />
                 {isPeeking ? "Observing..." : !canPeek ? "Cooldown..." : "Peek"}
               </Button>
             )}
 
-            {(!isRunning || sessionType !== "work") && (
+            {sessionType !== "work" && !isRunning && (
               <Button
-                variant={sessionType === "work" ? "mystery" : "break"}
+                variant="break"
                 size="lg"
                 onClick={handleStart}
               >
                 <Play className="mr-2 h-5 w-5" />
-                {sessionType === "work" && timeLeft === 0 && !isRunning 
-                  ? "Continue to Break" 
-                  : `Start ${sessionType === "work" ? "Work" : "Break"}`}
+                {isExpired ? "Start Work" : "Start Break"}
               </Button>
             )}
             
