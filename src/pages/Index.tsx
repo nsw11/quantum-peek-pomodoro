@@ -238,8 +238,8 @@ const Index = () => {
 
           {/* Timer display */}
           <div className="text-center space-y-4">
-            {sessionType === "work" && isRunning ? (
-              // Hidden timer during work
+            {sessionType === "work" ? (
+              // Hidden timer during work (stays hidden even when timer ends)
               <div className="space-y-6">
                 {!isPeeking ? (
                   <div className="h-32 flex items-center justify-center">
@@ -297,7 +297,9 @@ const Index = () => {
                 onClick={handleStart}
               >
                 <Play className="mr-2 h-5 w-5" />
-                Start {sessionType === "work" ? "Work" : "Break"}
+                {sessionType === "work" && timeLeft === 0 && !isRunning 
+                  ? "Continue to Break" 
+                  : `Start ${sessionType === "work" ? "Work" : "Break"}`}
               </Button>
             )}
             
