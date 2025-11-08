@@ -290,6 +290,17 @@ const Index = () => {
               </Button>
             )}
 
+            {sessionType === "work" && !isRunning && timeLeft > 0 && (
+              <Button
+                variant="mystery"
+                size="lg"
+                onClick={handleStart}
+              >
+                <Play className="mr-2 h-5 w-5" />
+                Start Work
+              </Button>
+            )}
+
             {sessionType !== "work" && !isRunning && (
               <Button
                 variant="break"
