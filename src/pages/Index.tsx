@@ -114,7 +114,7 @@ const Index = () => {
   }, [isPeeking, settings.peekPenaltyMinutes, toast]);
 
   const handlePeek = () => {
-    if (canPeek && sessionType === "work" && isRunning) {
+    if (canPeek && sessionType === "work" && (isRunning || timeLeft === 0)) {
       setIsPeeking(true);
     }
   };
@@ -283,7 +283,7 @@ const Index = () => {
                 variant="peek"
                 size="lg"
                 onClick={handlePeek}
-                disabled={!canPeek || isPeeking || !isRunning}
+                disabled={!canPeek || isPeeking}
               >
                 <Eye className="mr-2 h-5 w-5" />
                 {isPeeking ? "Observing..." : !canPeek ? "Cooldown..." : "Peek"}
